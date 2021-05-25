@@ -1,0 +1,84 @@
+이클립스에서 스프링 프로젝트 생성 후
+
+1. Maven 설정 변경
+	-Spring 버전 3.1 -> 4.3.xx
+	-Java 버전 1.6 -> 1.8
+	-기타 주요 라이브러리 버전 확인.
+	
+2. Maven 변경 내역을 이클립스 프로젝트에 적용해야함.
+	-프로젝트 우클릭(팝업) : Maven -> update project (옵션에 보면 Force update snapshot... 체크 하는게 좋음.)
+	-프로젝트 우클릭(팝업) : Run as -> maven clean
+						   Run as -> maven install
+						   Run as -> maven clean  : war 제거가 목적.
+	-Maven, 이클립스를 동시에 적용해서 사용하다보니, 맨마지막에 clean 해주는것.
+	-install만하고 납두면  war가 생성되있음. 톰캣은 war있으면 풀어버림. 목적은 war제거.
+						   
+가끔 신규 라이브러리 추가후 "Invalid LOC Header" 오류가 초반에 나면, (콘솔에 보임.)
+.m2 저장소에서 관련 라이브러리 폴더 삭제해보세요.
+
+3. 해당 프로젝트 적용 확인.
+	-속성(프로젝트 alt+enter) : -Deployment Assembly에 Maven Dependencies 라이브러리가 종종 사라져요.(있나 확인)
+								-java build path 확인
+
+=====================================================================================
+Maven, 이클립스 동시에 적용해서 사용하다 보니
+이클립스 메뉴의 Project의 clean이후 작업하시면 됨.
+install만하고 납두면  war가 생성되있음. 톰캣은 war있으면 풀어버림. 목적은 war제거.
+
+컨트롤러 먼저 -> 서비스 -> dao -> vo -> DB -> ...
+테이블 먼저 구성하고, -> vo -> dao
+무엇을 먼저하던 상관없음.
+잘 모르겠으면 컨트롤러와 뷰(jsp)를 먼저 만들면 됨.
+
+자료실 url 구성
+/data, pds, util
+
+클라이언트가 치고 들어올 때.
+/data/list.wow : 목록.
+/data/view.wow : 상세보기.
+...
+
++ 업로드 / 다운로드 url 구성.
+web.xml : 웹어플리케이션에서 가장 중요한 파일. (스프링의 매핑 *.wow)
+		  :	만약, wow + 확장자 없는것도 스프링에서 처리.
+
+Navigator Explorer, Package Explorer, Project Explorer 보여주는 방식 다름.
+
+com.study.data.web 			DataController
+com.study.data.service.Xxx 비즈니스
+com.study.data.dao			, persist, mapper, sql, DB
+com.study.vo					, dto, domain, model
+
+전자정부에서는 
+com.study.data.web.DataController
+com.study.data.service.DataService 	: 인터페이스
+com.study.data.service.IDataDao 		: 구현체는 마이바티스가 자동으로 해줌.
+com.study.data.service.impl 			: 서비스 구현체
+com.study.data.vo 			 			:	모델객체 위치
+
+web.xml에 스프링이 등록되있고,
+스프링의 설정파일의 위치가 web.xml에 기술되어 있습니다.
+
+CTAS 다른 테이블 만들기
+
+create table xxx
+as
+select
+
+============================================================================
+설정파일(이전에 개발한 놈들...), 컨트롤러 처리없이 jsp 보이는게 싫어.
+/WEB-INF/하위에 배치
+/WEB-INF/views에 jsp
+/WEB-INF/classes/spring
+/WEB-INF/classes/mybatis
+
+
+
+
+
+
+
+
+
+
+

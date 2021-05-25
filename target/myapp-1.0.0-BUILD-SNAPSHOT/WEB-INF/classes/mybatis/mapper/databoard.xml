@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.data.service.IDataBoardDao">
+	
+	<select id="getBoardCount" resultType="int"
+		parameterType="com.study.data.vo.DataSearchVO">
+		select count(*) from free_board
+		where 1=1
+	</select>
+
+	<select id="getBoardList"
+		resultType="com.study.data.vo.DataBoardVO"
+		parameterType="com.study.data.vo.DataSearchVO">
+		SELECT bo_no
+			  , bo_title
+			  , bo_category
+			  , bo_writer
+			  , bo_hit
+			  , to_char(bo_reg_date,'YYYY-MM-DD') AS bo_reg_date
+		FROM data_board
+		WHERE 1=1
+	</select>
+
+	<select id="getBoard" resultType="dataBoard"
+		parameterType="int">
+		SELECT bo_no
+			  , bo_title
+			  , bo_category
+			  , bo_writer
+			  , bo_pass
+			  , bo_content
+			  , bo_ip
+			  , bo_hit
+			  , TO_CHAR(bo_reg_date,'YYYY-MM-DD') AS bo_reg_date
+			  , TO_CHAR(bo_mod_date,'YYYY-MM-DD') AS bo_mod_date
+			  , bo_del_yn
+		FROM data_obard a
+		WHERE bo_no= #{monkey}
+	</select>
+
+	<insert id="insertBoard" parameterType = "com.study.data.vo.DataBoardVO">
+		INSERT INTO data_board (
+		     bo_no				, bo_title			, bo_category
+		    , bo_writer		, bo_pass			, bo_content
+		    , bo_ip			, bo_hit			, bo_reg_date
+		    , bo_mod_date	, bo_del_yn
+		) VALUES (
+			<![CDATA[
+		     seq_data_board.nextval		, #{boTitle}		, #{boCategory}
+		    , #{boWriter}				, #{boPass}		, #{boContent}
+		    , #{boIp}						, 0					, SYSDATE
+		    , NULL							,'N'
+		   ]]>
+		)
+	</insert>
+
+
+</mapper>

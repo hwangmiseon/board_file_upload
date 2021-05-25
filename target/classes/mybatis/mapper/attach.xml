@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.attach.service.IAttachDao">
+
+	<insert id="insertAttach"
+		parameterType="com.study.attach.vo.AttachVO">
+		INSERT INTO attach (
+		ATCH_NO
+		,ATCH_PARENT_NO
+		,ATCH_CATEGORY
+		,ATCH_FILE_NAME
+		,ATCH_ORIGINAL_NAME
+		,ATCH_FILE_SIZE
+		,ATCH_FANCY_SIZE
+		,ATCH_CONTENT_TYPE
+		,ATCH_PATH
+		,ATCH_DOWN_HIT
+		,ATCH_DEL_YN
+		,ATCH_REG_DATE
+
+		)VALUES (
+	<![CDATA[
+		seq_attach.nextval, #{atchParentNo},  #{atchCategory} 	
+		,#{atchFileName}	,#{atchOriginalName}	,#{atchFileSize}
+		,#{atchFancySize}	,#{atchContentType}	,#{atchPath}
+		,0	,'N'	,SYSDATE
+	]]>
+		)
+	</insert>
+
+</mapper>
