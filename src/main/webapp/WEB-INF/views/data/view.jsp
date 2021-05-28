@@ -17,10 +17,6 @@
 					<td>${board.boTitle }</td>
 				</tr>
 				<tr>
-					<th>글분류</th>
-					<td>${board.boCategoryNm }</td>
-				</tr>
-				<tr>
 					<th>작성자명</th>
 					<td>${board.boWriter }</td>
 				</tr>
@@ -29,6 +25,24 @@
 					<th>내용</th>
 					<td><textarea rows="10" name="boContent" class="form-control input-sm">${board.boContent }</textarea></td>
 				</tr>
+				<!-- 첨부파일  -->
+				<tr>
+					<th>첨부파일</th>
+					<td>
+						<c:forEach var="f" items="${board.attaches}" varStatus="st">
+						<div>
+							# 파일 ${st.count}
+							<a href="<c:url value='/attach/download/${f.atchNo}' />" target="_blank">
+								<span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+								${f.atchOriginalName}
+							</a>
+							Size : ${f.atchFancySize}
+							Down : ${f.atchDownHit}
+						</div>
+						</c:forEach>
+					</td>
+				</tr>
+				
 				<tr>
 					<th>등록자 IP</th>
 					<td>${board.boIp }</td>
@@ -48,11 +62,11 @@
 				<tr>
 					<td colspan="2">
 						<div class="pull-left">
-							<a href="freeList.wow" class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-list" aria-hidden="true"></span> &nbsp;&nbsp;목록
+							<a href="list.wow" class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-list" aria-hidden="true"></span> &nbsp;&nbsp;목록
 							</a>
 						</div>
 						<div class="pull-right">
-							<a href="freeEdit.wow?boNo=${board.boNo }" class="btn btn-success btn-sm"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> &nbsp;&nbsp;수정
+							<a href="edit.wow?boNo=${board.boNo }" class="btn btn-success btn-sm"> <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> &nbsp;&nbsp;수정
 							</a>
 						</div>
 					</td>
@@ -145,7 +159,7 @@ var replyParam = {"curPage" : 1
 				, "rowSizePerPage" : 10
 				, "reCategory" : "FREE"
 				, "reParentNo" : ${board.boNo} 
-				 }
+				 };
 
 	// 댓글목록을 구하는 함수
 	function fn_reply_list(){

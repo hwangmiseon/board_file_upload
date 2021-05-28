@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.study.attach.vo.AttachVO;
 
-
+@SuppressWarnings("serial")
 public class DataBoardVO implements Serializable{
 	private int boNo;                       /*글 번호*/
 	private String boTitle;                 /*글 제목*/
@@ -24,6 +24,7 @@ public class DataBoardVO implements Serializable{
 	
 	//codeVO
 	private String boCategoryNm;           /*글 분류 이름*/
+//	private MemberVO member;
 	
 	private List<AttachVO> attaches ;      /* 첨부파일 리스트 */
 	private int[] delAtchNos;          	/* 삭제할 대상 첨부파일 번호 */

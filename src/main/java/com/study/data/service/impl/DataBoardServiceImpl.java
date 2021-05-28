@@ -21,7 +21,7 @@ public class DataBoardServiceImpl implements IDataBoardService {
 
 	// FreeBoardServiceImpl 은 IFreeBoardDao 객체인
 	// freeBoardDao에 의존한다.
-
+   
 	@Inject
 	private IDataBoardDao dataDao;
 
@@ -38,11 +38,16 @@ public class DataBoardServiceImpl implements IDataBoardService {
 
 	@Override
 	public DataBoardVO getBoard(int boNo) throws BizNotFoundException {
-		DataBoardVO free = dataDao.getBoard(boNo);
-		if (free == null) {
+		// 두번째 방법 : 메인 dao에서 join을 통해 한번에 결과 조회 
+		DataBoardVO data = dataDao.getBoard(boNo);
+		if (data == null) {
 			throw new BizNotFoundException();
 		}
-		return free;
+		
+		// 첫번째 방법 : 각각의 dao를 통해 결과 조회
+//		List<AttachVO> atts = attachDao.getAttachByParentNoList(boNo, "DATA");
+//		data.setAttaches(atts);
+		return data;
 	}
 
 	@Override
@@ -62,8 +67,22 @@ public class DataBoardServiceImpl implements IDataBoardService {
 		if (board.getBoPass().equals(free.getBoPass())) {
 			System.out.println("modify");
 			int cnt = dataDao.updateBoard(free);
-			if (cnt < 1)
-				throw new BizNotEffectedException();
+			if (cnt < 1) throw new BizNotEffectedException();
+			
+			// 기존 삭제된 첨부파일 번호가 있는지 확인
+			int[] dels = free.getDelAtchNos();
+			if(dels != null) {
+				attachDao.deleteAttaches(dels);
+			}
+			
+			// 첨부파일이 존재하는 경우 첨부파일 등록 , parentNo 설정 필요
+			List<AttachVO> atchList = free.getAttaches();
+			if (atchList != null) {
+				for (AttachVO vo : atchList) {
+					vo.setAtchParentNo(free.getBoNo());
+					attachDao.insertAttach(vo);
+				}
+			}
 		} else {
 			throw new BizPasswordNotMatchedException();
 		}

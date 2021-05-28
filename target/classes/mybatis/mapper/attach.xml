@@ -27,5 +27,30 @@
 	]]>
 		)
 	</insert>
+	
+	
+	<update id="deleteAttaches">
+		DELETE attach
+		 WHERE 1 = 1 <!-- true, 의미없는 라인 -->
+		 <foreach item="tj" collection="array" open="AND atch_no IN (" close=")" separator=",">
+		 	#{tj}
+		 </foreach>
+		 <!-- , 배열이 널이거나 length 0개일때 삭제 안되게 false -->
+	</update>
+
+
+	<!-- 글보기에서 보여줄 첨부파일 정보 -->
+	<select id="getAttachByParentNoList" resultType="com.study.attach.vo.AttachVO">
+		SELECT atch_no
+			 , atch_original_name
+		   	, atch_fancy_size
+		     ,atch_down_hit
+			, atch_reg_date
+		FROM attach
+		WHERE atch_parent_no = #{parentNo}
+		AND atch_category = #{category}
+		AND atch_del_yn = 'N'
+		
+	</select>
 
 </mapper>

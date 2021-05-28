@@ -2,7 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.study.data.service.IDataBoardDao">
 	
-	<cache></cache>
+		<!-- association은 1:1 관계
+		   collection은 1:n 관계
+	 -->
+	<resultMap id="mapForGetBoard" type="com.study.data.vo.DataBoardVO">
+		<id column="bo_no" property="boNo"/>
+		<result column="bo_title" property="boTitle"/>
+		<result column="bo_writer" property="boWriter"/>
+		<result column="bo_pass" property="boPass"/>
+		<result column="bo_content" property="boContent"/>
+		<result column="bo_ip" property="boIp"/>
+		<result column="bo_hit" property="boHit"/>
+		<result column="bo_reg_date" property="boRegDate"/>
+		<result column="bo_mod_date" property="boModDate"/>
+		<result column="bo_del_yn" property="boDelYn"/>
+		<collection property="attaches" ofType="com.study.attach.vo.AttachVO">
+			<id column="atch_no" property="atchNo"/>
+			<result column="atch_original_name" property="atchOriginalName"/>
+			<result column="atch_fancy_size" property="atchFancySize"/>
+			<result column="atch_down_hit" property="atchDownHit"/>
+		</collection>
+	</resultMap>
 	
 	<select id="getBoardCount" resultType="int"
 		parameterType="com.study.data.vo.DataSearchVO">
@@ -23,7 +43,7 @@
 		WHERE 1=1
 	</select>
 
-	<select id="getBoard" resultType="dataBoard"
+	<select id="getBoard" resultMap="mapForGetBoard"
 		parameterType="int">
 		SELECT bo_no
 			  , bo_title
@@ -36,7 +56,12 @@
 			  , TO_CHAR(bo_reg_date,'YYYY-MM-DD') AS bo_reg_date
 			  , TO_CHAR(bo_mod_date,'YYYY-MM-DD') AS bo_mod_date
 			  , bo_del_yn
-		FROM data_board
+			  , b.atch_no
+			  , b.atch_original_name
+			  , b.atch_fancy_size
+			  , b.atch_down_hit
+		FROM data_board a 
+        LEFT JOIN attach b ON  (a.bo_no = b.atch_parent_no AND b.atch_category = 'DATA')
 		WHERE bo_no= #{monkey}
 	</select>
 
@@ -59,6 +84,14 @@
 		   ]]>
 		)
 	</insert>
+	
+	 <update id="updateBoard" parameterType="com.study.data.vo.DataBoardVO">
+		update data_board 
+		set bo_title= #{boTitle}                    
+		  , bo_content= #{boContent}         
+		  , bo_mod_date= sysdate   
+		where  bo_no = #{boNo}        
+ 	</update>
 
 
 </mapper>
